@@ -5,3 +5,7 @@ lib
 tests/
 .envrc
 __pycache__
+/env/
+.idea
+set
+FLASK_APP
