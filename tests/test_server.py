@@ -52,10 +52,6 @@ class TestLogin:
         assert "Sorry, that email wasn&#39;t found." in response.data.decode()
 
 
-# def test_competition_access_correct(client, mock_clubs, mock_competitions):
-#     response = book(mock_competitions[0],mock_clubs[0])
-#     assert response.status_code == 200
-
 class TestBookingCompetition:
     def test_correct_competition_booking(self, client, mock_clubs, mock_competitions):
         club = [c for c in mock_clubs if c['name'] == 'First Club'][0]
@@ -107,3 +103,15 @@ class TestBookingCompetition:
         assert "Too many places required." in response.data.decode()
         assert f"Points available: {expected_club_points}" in response.data.decode()
         assert f"Number of Places: {expected_competition_places}" in response.data.decode()
+
+    def test_booking_more_than_twelve_places(self, client, mock_clubs, mock_competitions):
+        club = [c for c in mock_clubs if c['name'] == 'Second Club'][0]
+        competition = [c for c in mock_competitions if c['name'] == 'First Competition'][0]
+        places = '13'
+
+        response = client.post('/purchasePlaces', data={'club': club['name'],
+                                                        'competition': competition['name'],
+                                                        'places': places
+                                                        })
+        assert response.status_code == 200
+        assert "You can&#39;t book more than 12 places per competition." in response.data.decode()

@@ -8,7 +8,7 @@ def mock_clubs_data():
         {
             "name": "Second Club",
             "email": "secondclub@test.com",
-            "points": "5",
+            "points": "15",
         },
         {
             "name": "Third Club",
