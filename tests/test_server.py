@@ -115,3 +115,15 @@ class TestBookingCompetition:
                                                         })
         assert response.status_code == 200
         assert "You can&#39;t book more than 12 places per competition." in response.data.decode()
+
+    def test_booking_past_competition(self, client, mock_clubs, mock_competitions):
+        club = [c for c in mock_clubs if c['name'] == 'First Club'][0]
+        competition = [c for c in mock_competitions if c['name'] == 'Second Competition'][0]
+        places = '2'
+
+        response = client.post('/purchasePlaces', data={'club': club['name'],
+                                                        'competition': competition['name'],
+                                                        'places': places
+                                                        })
+        assert response.status_code == 200
+        assert "This competition is already passed." in response.data.decode()

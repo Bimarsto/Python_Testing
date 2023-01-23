@@ -1,4 +1,5 @@
 import json
+import datetime
 from flask import Flask, render_template, request, redirect, flash, url_for
 
 
@@ -50,6 +51,10 @@ def book(competition, club):
 @app.route('/purchasePlaces', methods=['POST'])
 def purchasePlaces():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
+    competition_time = datetime.datetime.strptime(
+        competition['date'],
+        "%Y-%m-%d %H:%M:%S"
+    )
     club = [c for c in clubs if c['name'] == request.form['club']][0]
     placesRequired = int(request.form['places'])
     if placesRequired > int(club['points']) or placesRequired < 0:
@@ -58,6 +63,8 @@ def purchasePlaces():
         flash('Too many places required.')
     elif placesRequired > 12:
         flash("You can't book more than 12 places per competition.")
+    elif competition_time < datetime.datetime.now():
+        flash('This competition is already passed.')
     else:
         competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
         club['points'] = int(club['points']) - placesRequired
