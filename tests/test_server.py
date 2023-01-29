@@ -127,3 +127,12 @@ class TestBookingCompetition:
                                                         })
         assert response.status_code == 200
         assert "This competition is already passed." in response.data.decode()
+
+
+class TestPointsView:
+    def test_clubs_points_display(self, client, mock_clubs, mock_competitions):
+        response = client.get('/clubs')
+        assert response.status_code == 200
+        assert "Clubs | GUDLFT Registration" in response.data.decode()
+        assert "Third Club" in response.data.decode()
+
