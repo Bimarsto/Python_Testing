@@ -136,3 +136,9 @@ class TestPointsView:
         assert "Clubs | GUDLFT Registration" in response.data.decode()
         assert "Third Club" in response.data.decode()
 
+
+class TestLogout:
+    def test_logout(self, client):
+        response = client.get('/logout', follow_redirects=True)
+        assert response.status_code == 200
+        assert "Welcome to the GUDLFT Registration Portal!" in response.data.decode()
